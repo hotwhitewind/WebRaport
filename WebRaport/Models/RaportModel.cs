@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace WebRaport.Models
 {
-    public class ReportModel
+    public class RaportModel
     {
-        public int Id { get; set; }
-        public string ReportTitle { get; set; }
+        public int RaportId { get; set; }
+        public string RaportTitle { get; set; }
         public List<FieldModel> Fields { get; set; }
     }
 }

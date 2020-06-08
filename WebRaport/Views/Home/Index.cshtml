@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Общая информация";
+﻿
+@model WebRaport.ViewModels.UsersAndRaportsViewModel
+
+@{
+    ViewData["Title"] = "Главная панель";
 }
 
 <div class="content-wrapper">
@@ -22,21 +25,23 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 connectedSortable">
-                    <div class="card">
-                        <div class="card-header ui-sortable-handle" style="cursor: move;">
-                            <h5 class="card-title">Текущая информация</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                Прослушайте важное правительственное объявление!!!
-                            </p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
+                <form asp-action="Index">
+                    <div class="form-group">
+                        <label class="form-check-label">Список пользователей</label>
+                        <select asp-for="UserId" class="form-control" asp-items="@Model.UsersList"></select>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label class="form-check-label">Список пользователей</label>
+                        <select asp-for="RaportId" class="form-control" asp-items="@Model.RaportsList"></select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Настроить" class="btn btn-outline-dark" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

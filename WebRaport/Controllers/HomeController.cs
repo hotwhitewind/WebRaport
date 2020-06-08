@@ -4,28 +4,58 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using WebRaport.Interfaces;
 using WebRaport.Models;
+using WebRaport.ViewModels;
 
 namespace WebRaport.Controllers
 {
     public class HomeController : Controller
     {
+        private IUsersRepository _userRepo;
+        private IRaportRepository _raportRepo;
+
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUsersRepository userRepository, IRaportRepository raportRepository)
         {
             _logger = logger;
+            _userRepo = userRepository;
+            _raportRepo = raportRepository;
         }
 
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var users = await _userRepo.GetUsers();
+            var raports = await _raportRepo.GetRaports();
+            var usersRaportsViewModel = new UsersAndRaportsViewModel();
+
+            usersRaportsViewModel.UsersList = users.
+                Select(a => new SelectListItem()
+                {
+                    Value = a.UserId.ToString(),
+                    Text = $"{a.LastName} {a.FirstName} {a.SecondName}"
+                }).
+                ToList();
+            usersRaportsViewModel.RaportsList = raports.
+                Select(a => new SelectListItem()
+                {
+                    Value = a.RaportId.ToString(),
+                    Text = $"{a.RaportTitle}"
+                }).
+                ToList();
+
+            return View(usersRaportsViewModel);
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(UsersAndRaportsViewModel userRaportViewModel)
         {
-            return View();
+            return RedirectToAction("Index", "RaportOptions", userRaportViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

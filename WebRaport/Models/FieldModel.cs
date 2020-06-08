@@ -7,7 +7,9 @@ namespace WebRaport.Models
 {
     public class FieldModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
+        public int FieldId { get; set; }
+        public string FieldTitle { get; set; }
+        public string FromInfoTableName { get; set; }
+        public string FromInfoColumnName { get; set; }
     }
 }

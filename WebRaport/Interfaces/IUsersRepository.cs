@@ -9,5 +9,7 @@ namespace WebRaport.Interfaces
     public interface IUsersRepository
     {
         Task<List<User>> GetUsers();
+        Task<User> GetUserById(int Id);
+        Task<string> GetUserFiledValueByColumnName(int Id, string ColumnName);
     }
 }

@@ -6,9 +6,9 @@ using WebRaport.Models;
 
 namespace WebRaport.Interfaces
 {
-    interface IReportRepository
+    public interface IRaportRepository
     {
-        Task<List<ReportModel>> GetReports();
-        Task<List<FieldModel>> GetFieldsByReportId(int Id);
+        Task<List<RaportModel>> GetRaports();
+        Task<List<FieldModel>> GetFieldsByRaportId(int Id);
     }
 }

@@ -7,11 +7,11 @@ namespace WebRaport.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
-        public string FamilyName { get; set; }
+        public string LastName { get; set; }
         public string Position { get; set; }
-        public string MilitaryRank { get; set; }
+        public string Rank { get; set; }
     }
 }

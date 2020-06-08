@@ -26,7 +26,7 @@ namespace WebRaport
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IUsersRepository, MocUsersRepository>();
-            services.AddTransient<IReportRepository, MocReportRepository>();
+            services.AddTransient<IRaportRepository, MocRaportRepository>();
             services.AddControllersWithViews();
         }
 
