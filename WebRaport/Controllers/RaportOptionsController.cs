@@ -50,7 +50,7 @@ namespace WebRaport.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Preview(List<FiledModelWithValue> fieldsModelWithView)
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "DocumentView");
         }
     }
 }

@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="~/lib/overlayScrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="~/lib/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="~/lib/summernote/summernote-bs4.css">
+    @if (IsSectionDefined("LayoutHead"))
+    {
+        @RenderSection("LayoutHead")
+    }
 </head>
 <body class="sidebar-mini" style="height: auto;">
     <header>
@@ -144,7 +148,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a asp-controller="Home" asp-action="Index" class="nav-link">
                                 <p>
@@ -152,36 +156,43 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a asp-controller="DocumentView" asp-action="Index" class="nav-link">
+                                <p>
+                                    Превью документа
+                                </p>
+                            </a>
+                        </li>
                         @*@if ((await AuthorizationService.AuthorizeAsync(User, "AdminRequiredPermission")).Succeeded)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Users" asp-action="Index">
-                                    <p>
-                                        РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
-                                    </p>
-                                </a>
-                            </li>
-                        }*@
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Users" asp-action="Index">
+                    <p>
+                        РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
+                    </p>
+                </a>
+            </li>
+        }*@
                         @*@if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Login" asp-action="Logout">
-                                    <p>
-                                        Р’С‹Р№С‚Рё
-                                    </p>
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Login" asp-action="Login">
-                                    <p>
-                                        Р’РѕР№С‚Рё
-                                    </p>
-                                </a>
-                            </li>
-                        }*@
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Login" asp-action="Logout">
+                    <p>
+                        Р’С‹Р№С‚Рё
+                    </p>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Login" asp-action="Login">
+                    <p>
+                        Р’РѕР№С‚Рё
+                    </p>
+                </a>
+            </li>
+        }*@
                     </ul>
                 </nav>
             </div>
