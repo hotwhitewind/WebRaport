@@ -12,12 +12,12 @@ namespace WebRaport.Controllers
 {
     public class HomeController : Controller
     {
-        private IUsersRepository _userRepo;
+        private IUserRepository _userRepo;
         private IRaportRepository _raportRepo;
 
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IUsersRepository userRepository, IRaportRepository raportRepository)
+        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IRaportRepository raportRepository)
         {
             _logger = logger;
             _userRepo = userRepository;
@@ -34,14 +34,14 @@ namespace WebRaport.Controllers
             usersRaportsViewModel.UsersList = users.
                 Select(a => new SelectListItem()
                 {
-                    Value = a.UserId.ToString(),
+                    Value = a.UserID.ToString(),
                     Text = $"{a.LastName} {a.FirstName} {a.SecondName}"
                 }).
                 ToList();
             usersRaportsViewModel.RaportsList = raports.
                 Select(a => new SelectListItem()
                 {
-                    Value = a.RaportId.ToString(),
+                    Value = a.RaportID.ToString(),
                     Text = $"{a.RaportTitle}"
                 }).
                 ToList();

@@ -8,7 +8,7 @@ namespace WebRaport.ViewModels
 {
     public class UsersAndRaportsViewModel
     {
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public int RaportId { get; set; }
         public List<SelectListItem> UsersList { get; set; }
         public List<SelectListItem> RaportsList { get; set; }

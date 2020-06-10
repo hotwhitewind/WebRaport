@@ -1,0 +1,42 @@
+﻿@using System.Linq
+@model WebRaport.ViewModels.ChangeUserRoleViewModel
+
+@{
+    ViewData["Title"] = "Изменить разрешения для пользователя";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]: @Model.Login (@Model.LastName @Model.FirstName)</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <form asp-action="ChangeUserRole" asp-controller="Users">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Id" type="hidden" />
+                        <input asp-for="Login" type="hidden" />
+                        
+                        <div class="form-group">
+                            <select class="form-control" asp-items="new SelectList(Model.selectRoles.Select((c) => c.Name))" asp-for="CurrentRole"></select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Сохранить" class="btn btn-outline-dark" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-Id="@Model.Id">Вернуться к редактированию пользователя</a>
+            </div>
+        </div>
+    </div>
+</div>

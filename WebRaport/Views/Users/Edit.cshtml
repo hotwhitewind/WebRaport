@@ -1,0 +1,86 @@
+﻿@model WebRaport.Models.User
+
+@{
+    ViewData["Title"] = "Изменить данные пользователя";
+}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="UserID" class="control-label"></label>
+                            <input asp-for="UserID" class="form-control" readonly="true" />
+                            <span asp-validation-for="Login" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Login" class="control-label"></label>
+                            <input asp-for="Login" class="form-control" />
+                            <span asp-validation-for="Login" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SecondName" class="control-label"></label>
+                            <input asp-for="SecondName" class="form-control" />
+                            <span asp-validation-for="SecondName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Rank" class="control-label"></label>
+                            <input asp-for="Rank" class="form-control" />
+                            <span asp-validation-for="Rank" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Position" class="control-label"></label>
+                            <input asp-for="Position" class="form-control" />
+                            <span asp-validation-for="Position" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PersonalNumber" class="control-label"></label>
+                            <input asp-for="PersonalNumber" class="form-control" />
+                            <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BirthDay" class="control-label"></label>
+                            <input asp-for="BirthDay" class="form-control" />
+                            <span asp-validation-for="BirthDay" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <a asp-action="ChangeUserPassword" asp-route-Id="@Model.UserID">Сменить пароль пользователя</a>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Сохранить" class="btn btn-outline-dark" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <a asp-action="Index">Вернуться к списку пользователей</a>
+            </div>
+        </div>
+    </div>
+</div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

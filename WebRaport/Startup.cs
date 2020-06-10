@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using GleamTech.AspNet.Core;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebRaport.Authorization;
 using WebRaport.Interfaces;
 using WebRaport.Repository;
 
@@ -27,8 +26,18 @@ namespace WebRaport
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGleamTech();
-            services.AddTransient<IUsersRepository, MocUsersRepository>();
+            services.AddTransient<IUserRepository, MocUsersRepository>();
             services.AddTransient<IRaportRepository, MocRaportRepository>();
+            services.AddTransient<IPermissionRepository, MocPermissionRepository>();
+            services.AddSingleton<IAuthorizationHandler, AuthHandler>();
+            services.AddAuthorization(options =>
+                options.AddPolicy("AdminRequiredPermission", policy => policy.AddRequirements(new AuthRequired("admin"))));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Login/Login");
+                options.AccessDeniedPath = new PathString("/Login/Access");
+            });
+
             services.AddControllersWithViews();
         }
 
@@ -53,6 +62,7 @@ namespace WebRaport
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

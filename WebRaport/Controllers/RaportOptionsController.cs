@@ -12,12 +12,12 @@ namespace WebRaport.Controllers
 {
     public class RaportOptionsController : Controller
     {
-        private IUsersRepository _userRepo;
+        private IUserRepository _userRepo;
         private IRaportRepository _raportRepo;
 
         private ILogger<RaportOptionsController> _logger;
 
-        public RaportOptionsController(ILogger<RaportOptionsController> logger, IUsersRepository userRepository, IRaportRepository raportRepository)
+        public RaportOptionsController(ILogger<RaportOptionsController> logger, IUserRepository userRepository, IRaportRepository raportRepository)
         {
             _logger = logger;
             _userRepo = userRepository;
@@ -33,7 +33,7 @@ namespace WebRaport.Controllers
                 switch(field.FromInfoTableName)
                 {
                     case "Users":
-                        var value = await _userRepo.GetUserFiledValueByColumnName(userRaportViewModel.UserId, field.FromInfoColumnName);
+                        var value = await _userRepo.GetUserFiledValueByColumnName(userRaportViewModel.UserID, field.FromInfoColumnName);
                         var newFieldWithValue = new FiledModelWithValue
                         {
                             FieldName = field.FieldTitle,
