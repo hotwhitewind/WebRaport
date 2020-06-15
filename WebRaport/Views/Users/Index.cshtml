@@ -5,6 +5,11 @@
     ViewData["Title"] = "Список пользователей";
 }
 
+<div id="dialogDiv" class="modal fade">
+    <div id="dialogContent" class="modal-dialog">
+    </div>
+</div>
+
 <div class="content-wrapper" style="min-height: 1192.4px">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -30,11 +35,12 @@
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Свернуть">
-                        <i class="fas fa-minus"></i></button>
+                        <i class="fas fa-minus"></i>
+                    </button>
                 </div>
             </div>
             <a style="max-width: 10%" class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Create">Создать пользователя</a>
-            <br/>
+            <br />
             <div class="card-body p-0">
                 <table class="table table-striped projects">
                     <thead>
@@ -48,43 +54,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <a>@item.UserID</a>
-                            </td>
-                            <td>
-                                <a>@item.Login</a>
-                            </td>
-                            <td>
-                                <a>@item.LastName</a>
-                            </td>
-                            <td>
-                                <a>@item.FirstName</a>
-                            </td>
-                            <td>
-                                <a>@item.Role.Name</a>
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserID">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Редактировать
-                                </a>
-                                <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserID">
-                                    <i class="fas fa-folder">
-                                    </i>
-                                    Сменить разрешения
-                                </a>
-                                <a class="btn btn-danger btn-sm" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserID">
-                                    <i class="fas fa-trash">
-                                    </i>
-                                    Удалить
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.UserID">
+                                <td>
+                                    <a>@item.UserID</a>
+                                </td>
+                                <td>
+                                    <a>@item.Login</a>
+                                </td>
+                                <td>
+                                    <a>@item.LastName</a>
+                                </td>
+                                <td>
+                                    <a>@item.FirstName</a>
+                                </td>
+                                <td>
+                                    <a>@item.Role.Name</a>
+                                </td>
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserID">
+                                        <i class="fas fa-pencil-alt">
+                                        </i>
+                                        Редактировать
+                                    </a>
+                                    <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserID">
+                                        <i class="fas fa-folder">
+                                        </i>
+                                        Сменить разрешения
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserID">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Удалить
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

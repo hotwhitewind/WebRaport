@@ -1,0 +1,18 @@
+﻿@model WebRaport.Models.User
+    <div class="modal-content">
+        <form asp-action="Delete" asp-controller="Users" method="post" class="note-modal-form">
+            <div class="modal-header">
+                <h3 id="myModalLabel">Подтверждение</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" asp-for="UserID" />
+                <input type="hidden" asp-for="Login" />
+                <p>Вы точно хотите удалить запись для @Model.LastName</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal">Отменить</button>
+                <button class="btn btn-primary" data-save="modal">Удалить</button>
+            </div>
+        </form>
+    </div>

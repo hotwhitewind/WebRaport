@@ -31,12 +31,18 @@ namespace WebRaport.Repository
         public async Task<bool> Create(User user)
         {
             if (user.Role == null || (user.Role.PermissionID == 0 && string.IsNullOrEmpty(user.Role.Name)))
-                return false;
+            {
+                var allPermissions = await _permissions.GetPermissions();
+                var userPerm = allPermissions.Where((c) => c.Name == "user").FirstOrDefault();
+                if (userPerm == null) return false;
+                user.Role = userPerm;
+            }
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
-                    user.Password = ComputeHash(user.Password);
+                    if(!string.IsNullOrEmpty(user.Password))
+                        user.Password = ComputeHash(user.Password);
                     var sqlQuery =
                         "INSERT INTO Users (Login,FirstName,LastName,SecondName,Password,Position,Rank,PersonalNumber,BirthDay) " +
                         "VALUES (@Login, @FirstName, @LastName, @SecondName,@Password,@Position,@Rank,@PersonalNumber,@BirthDay); " +
@@ -155,7 +161,7 @@ namespace WebRaport.Repository
                     var sqlQuery =
                         "UPDATE Users SET Login = @Login, FirstName = @FirstName," +
                         "LastName = @LastName, SecondName = @SecondName," +
-                        "Password = @Password, Position = @Position, Rank = @Rank, PersonalNumber = @PersonalNumber , BirthDay = @BirthDay " +
+                        "Position = @Position, Rank = @Rank, PersonalNumber = @PersonalNumber , BirthDay = @BirthDay " +
                         "WHERE UserID = @UserID";
                     await db.ExecuteAsync(sqlQuery, user);
                 }

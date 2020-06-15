@@ -46,10 +46,13 @@ namespace WebRaport.Controllers
             {
                 Login = user.Login,
                 Password =  user.Password,
-                Role = new Permission()
-                {
-                    Name = user.Role
-                }
+                FirstName = user.FirstName,
+                SecondName = user.SecondName,
+                LastName = user.LastName,
+                BirthDay = user.BirthDay,
+                Rank = user.Rank,
+                Position = user.Position,
+                PersonalNumber = user.PersonalNumber
             };
 
             await _userRepository.Create(newUser);
@@ -133,9 +136,18 @@ namespace WebRaport.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int Id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(User user)
         {
-            return Content("Функция не реализована");
+            await _userRepository.Delete(user.UserID);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var user = await _userRepository.Get(Id);
+            return PartialView("RemoveUserViewPartial", user);
         }
     }
 }
