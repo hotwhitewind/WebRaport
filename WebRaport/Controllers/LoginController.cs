@@ -19,6 +19,11 @@ namespace WebRaport.Controllers
             _repository = repository;
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         [HttpGet]
         public async Task<IActionResult> Login()
         {
@@ -56,7 +61,7 @@ namespace WebRaport.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim("AdminRequiredPermission", roleName)
+                new Claim("RequiredPermission", roleName),
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);

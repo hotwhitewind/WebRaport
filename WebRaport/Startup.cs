@@ -32,10 +32,13 @@ namespace WebRaport
             services.AddSingleton<IAuthorizationHandler, AuthHandler>();
             services.AddAuthorization(options =>
                 options.AddPolicy("AdminRequiredPermission", policy => policy.AddRequirements(new AuthRequired("admin"))));
+            services.AddAuthorization(options =>
+                options.AddPolicy("EditorRequiredPermission", policy => policy.AddRequirements(new AuthRequired("editor"))));
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = new PathString("/Login/Login");
-                options.AccessDeniedPath = new PathString("/Login/Access");
+                options.AccessDeniedPath = new PathString("/Login/AccessDenied");
             });
 
             services.AddControllersWithViews();

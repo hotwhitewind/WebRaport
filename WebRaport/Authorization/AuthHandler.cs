@@ -11,7 +11,8 @@ namespace WebRaport.Authorization
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthRequired requirement)
         {
             var user = context.User;
-            var claim = context.User.FindFirst("AdminRequiredPermission");
+            var claim = context.User.FindFirst("RequiredPermission");
+
             if (claim != null)
             {
                 var authName = claim.Value;
