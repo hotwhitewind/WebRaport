@@ -9,6 +9,7 @@ namespace WebRaport.Models
     {
         public int RaportID { get; set; }
         public string RaportTitle { get; set; }
+        public byte[] RaportData { get; set; }
         public List<FieldModel> Fields { get; set; }
     }
 }

@@ -31,7 +31,6 @@ namespace WebRaport.Controllers
             return View(users);
         }
 
-        [Authorize(Policy = "EditorRequiredPermission")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {

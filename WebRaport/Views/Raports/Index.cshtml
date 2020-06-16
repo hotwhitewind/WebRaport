@@ -1,0 +1,80 @@
+﻿@model IEnumerable<RaportModel>
+@{
+    ViewData["Title"] = "Редактирование рапортов";
+}
+
+<div id="dialogDiv" class="modal fade">
+    <div id="dialogContent" class="modal-dialog">
+    </div>
+</div>
+
+<div class="content-wrapper" style="min-height: 1192.4px">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>@ViewData["Title"]</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Рапорта</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Свернуть">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <a style="max-width: 10%" class="btn btn-primary btn-sm" asp-controller="Raports" asp-action="Create">Создать рапорт</a>
+            <br />
+            <div class="card-body p-0">
+                <table class="table table-striped projects">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%">RaportID</th>
+                            <th style="width: 40%">Название</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.RaportID">
+                                <td>
+                                    <a>@item.RaportID</a>
+                                </td>
+                                <td>
+                                    <a>@item.RaportTitle</a>
+                                </td>
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-primary btn-sm" asp-controller="Raports" asp-action="Edit" asp-route-id="@item.RaportID">
+                                        <i class="fas fa-pencil-alt">
+                                        </i>
+                                        Редактировать
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Raports" asp-action="Delete" asp-route-id="@item.RaportID">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Удалить
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+

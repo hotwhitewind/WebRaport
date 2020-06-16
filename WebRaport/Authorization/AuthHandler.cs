@@ -16,7 +16,8 @@ namespace WebRaport.Authorization
             if (claim != null)
             {
                 var authName = claim.Value;
-                if (authName == requirement.RoleName)
+                var result = requirement.RoleName.Where((c) => authName == c);
+                if (result.Any())
                     context.Succeed(requirement);
             }
 

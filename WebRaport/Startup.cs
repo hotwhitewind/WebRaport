@@ -31,9 +31,11 @@ namespace WebRaport
             services.AddTransient<IPermissionRepository, MocPermissionRepository>();
             services.AddSingleton<IAuthorizationHandler, AuthHandler>();
             services.AddAuthorization(options =>
-                options.AddPolicy("AdminRequiredPermission", policy => policy.AddRequirements(new AuthRequired("admin"))));
+                options.AddPolicy("AdminRequiredPermission", policy => policy.
+                AddRequirements(new AuthRequired(new string[] { "admin" }))));
             services.AddAuthorization(options =>
-                options.AddPolicy("EditorRequiredPermission", policy => policy.AddRequirements(new AuthRequired("editor"))));
+                options.AddPolicy("EditorRequiredPermission", policy => policy.
+                AddRequirements(new AuthRequired(new string[] { "editor", "admin" }))));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {

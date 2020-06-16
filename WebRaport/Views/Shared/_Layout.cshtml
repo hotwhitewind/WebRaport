@@ -42,7 +42,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a asp-controller="Home" asp-action="Index" class="nav-link">
                                 <p>
@@ -56,6 +56,17 @@
                                 <a class="nav-link" asp-controller="Users" asp-action="Index">
                                     <p>
                                         Список пользователей
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "AdminRequiredPermission")).Succeeded ||
+                            (await AuthorizationService.AuthorizeAsync(User, "EditorRequiredPermission")).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Raports" asp-action="Index">
+                                    <p>
+                                        Список рапортов
                                     </p>
                                 </a>
                             </li>

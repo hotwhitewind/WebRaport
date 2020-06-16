@@ -8,10 +8,10 @@ namespace WebRaport.Authorization
 {
     public class AuthRequired : IAuthorizationRequirement
     {
-        public string RoleName { get; set; }
-        public AuthRequired(string roleName)
+        public List<string> RoleName { get; set; }
+        public AuthRequired(string[] rolesName)
         {
-            RoleName = roleName;
+            RoleName = rolesName.ToList();
         }
     }
 }

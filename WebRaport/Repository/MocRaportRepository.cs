@@ -59,5 +59,61 @@ namespace WebRaport.Repository
                 }
             }
         }
+
+        public async Task<bool> CreateRaport(RaportModel raport)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var sqlQuery =
+                        "INSERT INTO Raports (RaportTitle, RaportData) " +
+                        "VALUES (@RaportTitle, @RaportData); " +
+                        "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    int? raportIdRet = await db.QueryFirstOrDefaultAsync<int>(sqlQuery, raport);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        public async Task DeleteRaport(int Id)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var sqlQuery =
+                        "DELETE FROM Raports WHERE RaportID = @Id;";
+                    await db.ExecuteAsync(sqlQuery, new { Id });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                }
+            }
+        }
+
+        public async Task<RaportModel> GetRaportById(int Id)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<RaportModel>("SELECT * FROM Raports WHERE RaportID = @Id", new { Id });
+                    return result.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
+        }
     }
 }

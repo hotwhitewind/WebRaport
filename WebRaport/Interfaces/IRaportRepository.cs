@@ -10,5 +10,8 @@ namespace WebRaport.Interfaces
     {
         Task<List<RaportModel>> GetRaports();
         Task<List<FieldModel>> GetFieldsByRaportId(int Id);
+        Task<bool> CreateRaport(RaportModel raport);
+        Task DeleteRaport(int Id);
+        Task<RaportModel> GetRaportById(int Id);
     }
 }
