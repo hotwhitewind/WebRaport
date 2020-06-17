@@ -1,99 +1,130 @@
 ﻿@using Dapper
 @model IEnumerable<WebRaport.Models.User>
 
-@{
-    ViewData["Title"] = "Список пользователей";
-}
-
 <div id="dialogDiv" class="modal fade">
     <div id="dialogContent" class="modal-dialog">
     </div>
 </div>
 
-<div class="content-wrapper" style="min-height: 1192.4px">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>@ViewData["Title"]</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
-                    </ol>
-                </div>
-            </div>
+                    <h1 class="m-0 text-dark">Пользователи</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </section>
-
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
     <section class="content">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Пользователи</h3>
-
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Свернуть">
-                        <i class="fas fa-minus"></i>
-                    </button>
+        <div class="container-fluid">
+            <!-- Buttons -->
+            <div class="row pb-3">
+                <div class="col-12">
+                    <!-- Button -->
+                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Create">Создать пользователя</a>
                 </div>
+                <!-- ./col -->
             </div>
-            <a style="max-width: 10%" class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Create">Создать пользователя</a>
-            <br />
-            <div class="card-body p-0">
-                <table class="table table-striped projects">
-                    <thead>
-                        <tr>
-                            <th style="width: 1%">UserID</th>
-                            <th style="width: 10%">Логин</th>
-                            <th style="width: 10%">Фамилия</th>
-                            <th style="width: 10%">Имя</th>
-                            <th style="width: 8%">Группа разрешений</th>
-                            <th style="width: 30%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr id="@item.UserId">
-                                <td>
-                                    <a>@item.UserId</a>
-                                </td>
-                                <td>
-                                    <a>@item.Login</a>
-                                </td>
-                                <td>
-                                    <a>@item.LastName</a>
-                                </td>
-                                <td>
-                                    <a>@item.FirstName</a>
-                                </td>
-                                <td>
-                                    <a>@item.Role.Name</a>
-                                </td>
-                                <td class="project-actions text-right">
-                                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">
-                                        <i class="fas fa-pencil-alt">
-                                        </i>
-                                        Редактировать
-                                    </a>
-                                    <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserId">
-                                        <i class="fas fa-folder">
-                                        </i>
-                                        Сменить разрешения
-                                    </a>
-                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">
-                                        <i class="fas fa-trash">
-                                        </i>
-                                        Удалить
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <!-- ./row -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-4 col-12 pb-1 pt-1">
+                                    <h3 class="card-title">Список пользователей</h3>
+                                </div>
+                                <!-- ./col -->
+                                <div class="col-xl-2 col-md-4 ml-auto col-xs-12 pb-1">
+                                    <div class="card-tools">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="table_search" class="form-control float-right" placeholder="Поиск">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                            </div>
+                                            <!-- ./input -->
+                                        </div>
+                                        <!-- ./input-group -->
+                                    </div>
+                                    <!-- ./card-tools -->
+                                </div>
+                                <!-- ./col -->
+                            </div>
+                            <!-- ./row -->
+                        </div>
+                        <!-- ./card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>UserID</th>
+                                        <th>Логин</th>
+                                        <th>Фамилия</th>
+                                        <th>Имя</th>
+                                        <th>Группа разрешений</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="@item.UserId">
+                                            <td>
+                                                <a>@item.UserId</a>
+                                            </td>
+                                            <td>
+                                                <a>@item.Login</a>
+                                            </td>
+                                            <td>
+                                                <a>@item.LastName</a>
+                                            </td>
+                                            <td>
+                                                <a>@item.FirstName</a>
+                                            </td>
+                                            <td>
+                                                <a>@item.Role.Name</a>
+                                            </td>
+                                            <td class="project-actions text-right">
+                                                <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Редактировать
+                                                </a>
+                                                <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserId">
+                                                    <i class="fas fa-folder">
+                                                    </i>
+                                                    Сменить разрешения
+                                                </a>
+                                                <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">
+                                                    <i class="fas fa-trash">
+                                                    </i>
+                                                    Удалить
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ./card -->
+                </div>
+                <!-- ./col -->
             </div>
-        </div>
+            <!-- ./row -->
     </section>
+    <!-- /.content -->
 </div>

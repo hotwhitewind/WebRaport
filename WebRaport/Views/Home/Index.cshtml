@@ -1,22 +1,13 @@
 ﻿
 @model WebRaport.ViewModels.UsersAndRaportsViewModel
 
-@{
-    ViewData["Title"] = "Главная панель";
-}
-
 <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
-                    </ol>
+                <div class="col-12">
+                    <h1 class="m-0 text-dark">Добро пожаловать в Полигон!</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -25,21 +16,29 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <form asp-action="Index">
-                    <div class="form-group">
-                        <label class="form-check-label">Список пользователей</label>
-                        <select asp-for="UserID" class="form-control" asp-items="@Model.UsersList"></select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-check-label">Список рапортов</label>
-                        <select asp-for="RaportId" class="form-control" asp-items="@Model.RaportsList"></select>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Настроить" class="btn btn-outline-dark" />
-                    </div>
-                </form>
+                <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                    <form asp-action="Index">
+                        <div class="form-group">
+                            <label class="form-check-label">Список пользователей</label>
+                            <select asp-for="UserID" class="form-control" asp-items="@Model.UsersList"></select>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="form-check-label">Список рапортов</label>
+                            <select asp-for="RaportId" class="form-control" asp-items="@Model.RaportsList"></select>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <input type="submit" value="Настроить" class="btn btn-outline-dark" />
+                        </div>
+                        <!-- /.form-group -->
+                    </form>
+                </div>
+                <!-- /.col -->
             </div>
+            <!-- /.row -->
         </div>
+        <!-- /.container-fluid -->
     </div>
 </div>
 @section Scripts {
