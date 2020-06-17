@@ -43,27 +43,27 @@
                 <table class="table table-striped projects">
                     <thead>
                         <tr>
-                            <th style="width: 1%">RaportID</th>
+                            <th style="width: 1%">RaportId</th>
                             <th style="width: 40%">Название</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr id="@item.RaportID">
+                            <tr id="@item.RaportId">
                                 <td>
-                                    <a>@item.RaportID</a>
+                                    <a>@item.RaportId</a>
                                 </td>
                                 <td>
                                     <a>@item.RaportTitle</a>
                                 </td>
                                 <td class="project-actions text-right">
-                                    <a class="btn btn-primary btn-sm" asp-controller="Raports" asp-action="Edit" asp-route-id="@item.RaportID">
+                                    <a class="btn btn-primary btn-sm" asp-controller="Raports" asp-action="Edit" asp-route-id="@item.RaportId">
                                         <i class="fas fa-pencil-alt">
                                         </i>
                                         Редактировать
                                     </a>
-                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Raports" asp-action="Delete" asp-route-id="@item.RaportID">
+                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Raports" asp-action="Delete" asp-route-id="@item.RaportId">
                                         <i class="fas fa-trash">
                                         </i>
                                         Удалить

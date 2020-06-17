@@ -36,7 +36,7 @@ namespace WebRaport.Controllers
                 {
                     Name = "admin",
                     Description = "Administrative permission",
-                    PermissionID = 1
+                    PermissionId = 1
                 };
 
                 await _permissionRepository.Create(adminPermission);

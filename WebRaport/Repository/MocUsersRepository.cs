@@ -30,7 +30,7 @@ namespace WebRaport.Repository
 
         public async Task<bool> Create(User user)
         {
-            if (user.Role == null || (user.Role.PermissionID == 0 && string.IsNullOrEmpty(user.Role.Name)))
+            if (user.Role == null || (user.Role.PermissionId == 0 && string.IsNullOrEmpty(user.Role.Name)))
             {
                 var allPermissions = await _permissions.GetPermissions();
                 var userPerm = allPermissions.Where((c) => c.Name == "user").FirstOrDefault();
@@ -48,17 +48,17 @@ namespace WebRaport.Repository
                         "VALUES (@Login, @FirstName, @LastName, @SecondName,@Password,@Position,@Rank,@PersonalNumber,@BirthDay); " +
                         "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int? userIdRet = await db.QueryFirstOrDefaultAsync<int>(sqlQuery, user);
-                    user.UserID = userIdRet.Value;
+                    user.UserId = userIdRet.Value;
                     if (user.Role != null)
                     {
-                        var userId = user.UserID;
-                        if (user.Role.PermissionID != 0)
+                        var userId = user.UserId;
+                        if (user.Role.PermissionId != 0)
                         {
-                            await _permissions.AddPermissionForUserByID(user.UserID, user.Role.PermissionID);
+                            await _permissions.AddPermissionForUserByID(user.UserId, user.Role.PermissionId);
                         }
                         if (!string.IsNullOrEmpty(user.Role.Name))
                         {
-                            await _permissions.AddPermissionForUserByName(user.UserID, user.Role.Name);
+                            await _permissions.AddPermissionForUserByName(user.UserId, user.Role.Name);
                         }
                     }
 
@@ -79,7 +79,7 @@ namespace WebRaport.Repository
                 try
                 {
                     var sqlQuery =
-                        "DELETE FROM Users WHERE UserID = @id;";
+                        "DELETE FROM Users WHERE UserId = @id;";
                     await db.ExecuteAsync(sqlQuery, new { id });
                 }
                 catch (Exception ex)
@@ -95,10 +95,10 @@ namespace WebRaport.Repository
             {
                 try
                 {
-                    var result = await db.QueryAsync<User>("SELECT * FROM Users WHERE UserID = @Id", new { Id });
+                    var result = await db.QueryAsync<User>("SELECT * FROM Users WHERE UserId = @Id", new { Id });
                     if (result.Any())
                     {
-                        var permission = await _permissions.GetByUserId(result.First().UserID);
+                        var permission = await _permissions.GetByUserId(result.First().UserId);
                         result.First().Role = permission;
                     }
                     return result.FirstOrDefault();
@@ -117,7 +117,7 @@ namespace WebRaport.Repository
             {
                 try
                 {
-                    var result = await db.QueryAsync<string>($"SELECT {ColumnName} FROM Users WHERE UserID= @Id", new { Id });
+                    var result = await db.QueryAsync<string>($"SELECT {ColumnName} FROM Users WHERE UserId = @Id", new { Id });
 
                     return result.FirstOrDefault();
                 }
@@ -138,7 +138,7 @@ namespace WebRaport.Repository
                     var result = await db.QueryAsync<User>("SELECT * FROM Users");
                     foreach (var user in result)
                     {
-                        var permission = await _permissions.GetByUserId(user.UserID);
+                        var permission = await _permissions.GetByUserId(user.UserId);
                         user.Role = permission;
                     }
 
@@ -162,7 +162,7 @@ namespace WebRaport.Repository
                         "UPDATE Users SET Login = @Login, FirstName = @FirstName," +
                         "LastName = @LastName, SecondName = @SecondName," +
                         "Position = @Position, Rank = @Rank, PersonalNumber = @PersonalNumber , BirthDay = @BirthDay " +
-                        "WHERE UserID = @UserID";
+                        "WHERE UserId = @UserId";
                     await db.ExecuteAsync(sqlQuery, user);
                 }
                 catch (Exception ex)
@@ -172,7 +172,7 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task UpdatePassword(int UserID, string newPassword)
+        public async Task UpdatePassword(int UserId, string newPassword)
         {
             var Password = ComputeHash(newPassword);
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
@@ -180,8 +180,8 @@ namespace WebRaport.Repository
                 try
                 {
                     var sqlQuery =
-                        "UPDATE Users SET Password = @Password WHERE UserID = @UserID";
-                    await db.ExecuteAsync(sqlQuery, new { Password, UserID });
+                        "UPDATE Users SET Password = @Password WHERE UserId = @UserId";
+                    await db.ExecuteAsync(sqlQuery, new { Password, UserId });
                 }
                 catch (Exception ex)
                 {
@@ -202,7 +202,7 @@ namespace WebRaport.Repository
                             "SELECT * FROM Users WHERE Login = @Login AND Password = @passwordHash",
                             new { Login, passwordHash });
                     if (user == null) return user;
-                    var permission = await _permissions.GetByUserId(user.UserID);
+                    var permission = await _permissions.GetByUserId(user.UserId);
                     if (permission != null)
                         user.Role = permission;
                     return user;

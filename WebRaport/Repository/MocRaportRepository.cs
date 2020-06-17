@@ -89,7 +89,7 @@ namespace WebRaport.Repository
                 try
                 {
                     var sqlQuery =
-                        "DELETE FROM Raports WHERE RaportID = @Id;";
+                        "DELETE FROM Raports WHERE RaportId = @Id;";
                     await db.ExecuteAsync(sqlQuery, new { Id });
                 }
                 catch (Exception ex)
@@ -105,7 +105,7 @@ namespace WebRaport.Repository
             {
                 try
                 {
-                    var result = await db.QueryAsync<RaportModel>("SELECT * FROM Raports WHERE RaportID = @Id", new { Id });
+                    var result = await db.QueryAsync<RaportModel>("SELECT * FROM Raports WHERE RaportId = @Id", new { Id });
                     return result.FirstOrDefault();
                 }
                 catch (Exception ex)

@@ -27,7 +27,7 @@ namespace WebRaport.Repository
                 try
                 {
                     var sqlQuery =
-                        "INSERT INTO Permissions (PermissionID, Name, Description) VALUES (@PermissionID, @Name, @Description);";
+                        "INSERT INTO Permissions (PermissionId, Name, Description) VALUES (@PermissionId, @Name, @Description);";
                     await db.ExecuteAsync(sqlQuery, permission);
                 }
                 catch (Exception ex)
@@ -49,7 +49,7 @@ namespace WebRaport.Repository
                 {
                     var result =
                         await db.QueryFirstOrDefaultAsync<Permission>(
-                            "SELECT * FROM Permissions WHERE PermissionID = @id", new { id });
+                            "SELECT * FROM Permissions WHERE PermissionId = @id", new { id });
                     return result;
                 }
                 catch (Exception ex)
@@ -76,17 +76,17 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task<Permission> GetByUserId(int UserID)
+        public async Task<Permission> GetByUserId(int UserId)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
                     var userPermission = await db.QueryFirstOrDefaultAsync<Permission>(
-                        "SELECT * FROM UserPermissions WHERE UserID = @UserID", new { UserID });
+                        "SELECT * FROM UserPermissions WHERE UserId = @UserId", new { UserId });
 
                     if (userPermission == null) return null;
-                    var permission = await Get(userPermission.PermissionID);
+                    var permission = await Get(userPermission.PermissionId);
                     return permission;
                 }
                 catch (Exception ex)
@@ -133,15 +133,15 @@ namespace WebRaport.Repository
             throw new NotImplementedException();
         }
 
-        public async Task AddPermissionForUserByName(int UserID, string permissionName)
+        public async Task AddPermissionForUserByName(int UserId, string permissionName)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
                     var result = await Get(permissionName);
-                    var sqlQuery = "INSERT INTO UserPermissions (UserID, PermissionID) VALUES (@UserID, @PermissionID)";
-                    await db.ExecuteAsync(sqlQuery, new { UserID, PermissionId = result.PermissionID });
+                    var sqlQuery = "INSERT INTO UserPermissions (UserId, PermissionId) VALUES (@UserId, @PermissionId)";
+                    await db.ExecuteAsync(sqlQuery, new { UserId, PermissionId = result.PermissionId });
                 }
                 catch (Exception ex)
                 {
@@ -150,15 +150,15 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task ChangePermissionForUserByName(int UserID, string permissionName)
+        public async Task ChangePermissionForUserByName(int UserId, string permissionName)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
                     var result = await Get(permissionName);
-                    var sqlQuery = "UPDATE UserPermissions SET PermissionID = @PermissionID WHERE UserID = @UserID";
-                    await db.ExecuteAsync(sqlQuery, new { UserID, PermissionId = result.PermissionID });
+                    var sqlQuery = "UPDATE UserPermissions SET PermissionId = @PermissionID WHERE UserId = @UserId";
+                    await db.ExecuteAsync(sqlQuery, new { UserId, PermissionId = result.PermissionId });
                 }
                 catch (Exception ex)
                 {
@@ -167,14 +167,14 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task AddPermissionForUserByID(int UserID, int permissionID)
+        public async Task AddPermissionForUserByID(int UserId, int permissionId)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
-                    var sqlQuery = "INSERT INTO UserPermissions (UserID, PermissionID) VALUES (@UserID, @PermissionID)";
-                    await db.ExecuteAsync(sqlQuery, new { UserID, PermissionId = permissionID });
+                    var sqlQuery = "INSERT INTO UserPermissions (UserId, PermissionId) VALUES (@UserId, @PermissionId)";
+                    await db.ExecuteAsync(sqlQuery, new { UserId, PermissionId = permissionId });
                 }
                 catch (Exception ex)
                 {

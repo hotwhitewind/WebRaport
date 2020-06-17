@@ -48,7 +48,7 @@ namespace WebRaport.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(RaportModel raport)
         {
-            await _raportRepo.DeleteRaport(raport.RaportID);
+            await _raportRepo.DeleteRaport(raport.RaportId);
             return RedirectToAction("Index");
         }
 

@@ -34,14 +34,14 @@ namespace WebRaport.Controllers
             usersRaportsViewModel.UsersList = users.
                 Select(a => new SelectListItem()
                 {
-                    Value = a.UserID.ToString(),
+                    Value = a.UserId.ToString(),
                     Text = $"{a.LastName} {a.FirstName} {a.SecondName}"
                 }).
                 ToList();
             usersRaportsViewModel.RaportsList = raports.
                 Select(a => new SelectListItem()
                 {
-                    Value = a.RaportID.ToString(),
+                    Value = a.RaportId.ToString(),
                     Text = $"{a.RaportTitle}"
                 }).
                 ToList();

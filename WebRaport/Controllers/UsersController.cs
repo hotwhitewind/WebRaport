@@ -70,7 +70,7 @@ namespace WebRaport.Controllers
 
             ChangePasswordViewModel model = new ChangePasswordViewModel()
             {
-                id = user.UserID,
+                id = user.UserId,
                 Login = user.Login,
                 PasswordConfirm = "",
                 NewPassword = ""
@@ -87,7 +87,7 @@ namespace WebRaport.Controllers
                 return NotFound();
             }
 
-            await _userRepository.UpdatePassword(user.UserID, password.NewPassword);
+            await _userRepository.UpdatePassword(user.UserId, password.NewPassword);
             return RedirectToAction("Edit", new {Id = password.id});
         }
 
@@ -95,7 +95,7 @@ namespace WebRaport.Controllers
         public async Task<IActionResult> Edit(int Id)
         {
             var editUser = await _userRepository.Get(Id);
-            editUser.Role = await _permissionRepository.GetByUserId(editUser.UserID);
+            editUser.Role = await _permissionRepository.GetByUserId(editUser.UserId);
             return View(editUser);
         }
 
@@ -115,11 +115,11 @@ namespace WebRaport.Controllers
                 return NotFound();
             }
 
-            user.Role = await _permissionRepository.GetByUserId(user.UserID);
+            user.Role = await _permissionRepository.GetByUserId(user.UserId);
 
             ChangeUserRoleViewModel model = new ChangeUserRoleViewModel()
             {
-                Id = user.UserID,
+                Id = user.UserId,
                 Login = user.Login,
                 CurrentRole = user.Role.Name,
                 LastName = user.LastName,
@@ -139,7 +139,7 @@ namespace WebRaport.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(User user)
         {
-            await _userRepository.Delete(user.UserID);
+            await _userRepository.Delete(user.UserId);
             return RedirectToAction("Index");
         }
 

@@ -56,9 +56,9 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr id="@item.UserID">
+                            <tr id="@item.UserId">
                                 <td>
-                                    <a>@item.UserID</a>
+                                    <a>@item.UserId</a>
                                 </td>
                                 <td>
                                     <a>@item.Login</a>
@@ -73,17 +73,17 @@
                                     <a>@item.Role.Name</a>
                                 </td>
                                 <td class="project-actions text-right">
-                                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserID">
+                                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserId">
                                         <i class="fas fa-pencil-alt">
                                         </i>
                                         Редактировать
                                     </a>
-                                    <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserID">
+                                    <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangeUserRole" asp-route-id="@item.UserId">
                                         <i class="fas fa-folder">
                                         </i>
                                         Сменить разрешения
                                     </a>
-                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserID">
+                                    <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="Users" asp-action="Delete" asp-route-id="@item.UserId">
                                         <i class="fas fa-trash">
                                         </i>
                                         Удалить
