@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,10 +15,12 @@ namespace WebRaport.Repository
     public class MocPermissionRepository : IPermissionRepository
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<MocPermissionRepository> _logger;
 
-        public MocPermissionRepository(IConfiguration config)
+        public MocPermissionRepository(IConfiguration config, ILogger<MocPermissionRepository> logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         public async Task Create(Permission permission)
@@ -32,13 +35,9 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                 }
             }
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Permission> Get(int id)
@@ -54,6 +53,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return null;
                 }
             }
@@ -70,7 +70,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    _logger.LogError(ex.Message);
                     return null;
                 }
             }
@@ -91,6 +91,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return null;
                 }
             }
@@ -107,6 +108,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return null;
                 }
             }
@@ -123,14 +125,10 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return null;
                 }
             }
-        }
-
-        public void Update(Permission user)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task AddPermissionForUserByName(int UserId, string permissionName)
@@ -145,7 +143,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex.Message);
                 }
             }
         }
@@ -162,7 +160,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex.Message);
                 }
             }
         }
@@ -178,7 +176,7 @@ namespace WebRaport.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex.Message);
                 }
             }
         }

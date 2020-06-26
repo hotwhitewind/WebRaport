@@ -30,8 +30,10 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div id="partialViewContainer">
-                    @await Html.PartialAsync("DocumentViewerPartialView", Model);
+                <div class="form-group">
+                    <div id="partialViewContainer">
+                        @await Html.PartialAsync("DocumentViewerPartialView", Model)
+                    </div>
                 </div>
             </div>
         </div>

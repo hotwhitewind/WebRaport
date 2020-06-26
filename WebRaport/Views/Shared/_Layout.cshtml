@@ -14,6 +14,11 @@
     <link rel="stylesheet" href="~/lib/overlayScrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="~/lib/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="~/lib/summernote/summernote-bs4.css">
+    <link rel="stylesheet" href="~/lib/jtable/themes/metro/blue/jtable.css" />
+    <link rel="stylesheet" href="~/lib/jtable/themes/jqueryui/jtable_jqueryui.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
     @if (IsSectionDefined("LayoutHead"))
     {
         @RenderSection("LayoutHead")
@@ -61,7 +66,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
+                        with font-awesome or any other icon font library -->
                         @if ((await AuthorizationService.AuthorizeAsync(User, "AdminRequiredPermission")).Succeeded)
                         {
                             <li class="nav-item">
@@ -73,7 +78,7 @@
                             </li>
                         }
                         @if ((await AuthorizationService.AuthorizeAsync(User, "AdminRequiredPermission")).Succeeded ||
-                            (await AuthorizationService.AuthorizeAsync(User, "EditorRequiredPermission")).Succeeded)
+                          (await AuthorizationService.AuthorizeAsync(User, "EditorRequiredPermission")).Succeeded)
                         {
                             <li class="nav-item">
                                 <a asp-controller="Raports" asp-action="Index" class="nav-link">
@@ -119,7 +124,6 @@
         $.widget.bridge('uibutton', $.ui.button)
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/chart.js/Chart.min.js" asp-append-version="true"></script>
     <script src="~/lib/sparklines/sparkline.js"></script>
     <script src="~/lib/jqvmap/jquery.vmap.min.js"></script>
     <script src="~/lib/jqvmap/maps/jquery.vmap.usa.js"></script>
@@ -129,10 +133,15 @@
     <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/summernote/summernote-bs4.min.js"></script>
     <script src="~/lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <script src="~/js/adminlte.js" asp-append-version="true"></script>
-    <script src="~/js/pages/dashboard.js" asp-append-version="true"></script>
-    <script src="~/js/demo.js" asp-append-version="true"></script>
+    <script src="~/js/adminlte.js"></script>
+    <script src="~/js/pages/dashboard.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- A helper library for JSON serialization -->
+    <script type="text/javascript" src="~/lib/jtable/external/json2.js" asp-append-version="true"></script>
+    <!-- Core jTable script file -->
+    <script type="text/javascript" src="~/lib/jtable/jquery.jtable.js" asp-append-version="true"></script>
+    <!-- ASP.NET Web Forms extension for jTable -->
+    <script type="text/javascript" src="~/lib/jtable/extensions/jquery.jtable.aspnetpagemethods.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

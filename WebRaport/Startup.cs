@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using WebRaport.Authorization;
 using WebRaport.Interfaces;
 using WebRaport.Repository;
@@ -29,6 +31,7 @@ namespace WebRaport
             services.AddTransient<IUserRepository, MocUsersRepository>();
             services.AddTransient<IRaportRepository, MocRaportRepository>();
             services.AddTransient<IPermissionRepository, MocPermissionRepository>();
+            services.AddTransient<IFieldsRepository, MocFieldsRepository>();
             services.AddSingleton<IAuthorizationHandler, AuthHandler>();
             services.AddAuthorization(options =>
                 options.AddPolicy("AdminRequiredPermission", policy => policy.
@@ -42,7 +45,8 @@ namespace WebRaport
                 options.LoginPath = new PathString("/Login/Login");
                 options.AccessDeniedPath = new PathString("/Login/AccessDenied");
             });
-
+            //подключение Newtonsoft Json с PascalCase по дефолту
+            services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ContractResolver = new DefaultContractResolver()); 
             services.AddControllersWithViews();
         }
 

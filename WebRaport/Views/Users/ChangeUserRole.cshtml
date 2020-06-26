@@ -9,22 +9,22 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-12">
                     <h1 class="m-0 text-dark">@ViewData["Title"]: @Model.Login (@Model.LastName @Model.FirstName)</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
-    
+
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <form asp-action="ChangeUserRole" asp-controller="Users">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input asp-for="Id" type="hidden" />
                         <input asp-for="Login" type="hidden" />
-                        
+
                         <div class="form-group">
                             <select class="form-control" asp-items="new SelectList(Model.selectRoles.Select((c) => c.Name))" asp-for="CurrentRole"></select>
                         </div>
@@ -40,3 +40,4 @@
         </div>
     </div>
 </div>
+

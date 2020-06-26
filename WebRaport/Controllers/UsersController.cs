@@ -35,6 +35,7 @@ namespace WebRaport.Controllers
         public async Task<IActionResult> Create()
         {
             UserCreateViewModel newUser = new UserCreateViewModel();
+            newUser.BirthDay = DateTime.Now;
             newUser.AllRoles = await _permissionRepository.GetPermissions();
             return View(newUser);
         }

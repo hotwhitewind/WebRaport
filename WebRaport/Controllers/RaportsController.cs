@@ -31,18 +31,9 @@ namespace WebRaport.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            using(var file = new FileStream(@"c:\Project\WebRaport\WebRaport\wwwroot\App_Data\ExampleFiles\Default.docx", FileMode.Open, FileAccess.Read))
-            {
-                byte[] newBuff = new byte[file.Length];
-                await file.ReadAsync(newBuff, 0, (int)file.Length);
-                var newRaport = new RaportModel();
-                newRaport.RaportTitle = "test";
-                newRaport.RaportData = newBuff;
-                await _raportRepo.CreateRaport(newRaport);
-            }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "CreateRaport");
         }
 
         [HttpPost]

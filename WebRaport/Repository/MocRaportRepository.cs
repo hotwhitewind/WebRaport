@@ -115,5 +115,32 @@ namespace WebRaport.Repository
                 }
             }
         }
+
+        public async Task<FieldModel> GetFieldById(int Id)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<FieldModel>("SELECT * FROM Fields WHERE FieldId = @Id", new { Id });
+                    return result.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        public Task<bool> CreateField(FieldModel field)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteField(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

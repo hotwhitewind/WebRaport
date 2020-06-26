@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Изменить данные пользователя";
 }
+
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -16,7 +17,7 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-6">
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
@@ -61,7 +62,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="BirthDay" class="control-label"></label>
-                            <input asp-for="BirthDay" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                            <input asp-for="BirthDay" type="text" id="date" asp-format="{0:dd-MM-yyyy}" class="form-control" />
                             <span asp-validation-for="BirthDay" class="text-danger"></span>
                         </div>
 
@@ -81,6 +82,7 @@
         </div>
     </div>
 </div>
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
