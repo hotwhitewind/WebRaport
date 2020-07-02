@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GleamTech.FileUltimate.AspNet.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WebRaport.Interfaces;
@@ -13,49 +14,68 @@ using WebRaport.ViewModels;
 
 namespace WebRaport.Controllers
 {
+    [NonController]
     [Authorize(Policy = "EditorRequiredPermission")]
     public class CreateRaportController : Controller
     {
         private IRaportRepository _raportRepo;
-        private CreateRaportViewModel _newRaport;
         private ILogger<CreateRaportController> _logger;
         private IFieldsRepository _fieldRepository;
+        private IUserRepository _userRepository;
 
         public CreateRaportController(IRaportRepository raportRepository, ILogger<CreateRaportController> logger, 
-            IFieldsRepository fieldsRepository)
+            IFieldsRepository fieldsRepository, IUserRepository userRepository)
         {
             _raportRepo = raportRepository;
             _logger = logger;
             _fieldRepository = fieldsRepository;
+            _userRepository = userRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? raportId, bool clearWorkDo = false, string pathToRaportFile = "")
         {
-            _newRaport = new CreateRaportViewModel();
-            var fileManager = new FileManager
+            if (!clearWorkDo)
             {
-                Height = 300,
-                Resizable = true,
-                ClientEvents = new FileManagerClientEvents()
+                //сюда мы придем из Raport/Create
+                CreateRaportViewModel _newRaport = new CreateRaportViewModel();
+                _newRaport.EditedRaportId = raportId.GetValueOrDefault();
+                _newRaport.PathToRaportFile = pathToRaportFile;
+                return View(_newRaport);
+            }
+            else
+            {
+                //сюда мы придем из CreateRaport/ResetCurrentWork
+                //создадим новый рапорт, Id не вернем
+                string currentUserName = this.ControllerContext.HttpContext.User.Identity.Name;
+                var userIds = await _userRepository.GetUserIdByLoginName(currentUserName);
+                if (userIds.Any())
                 {
-                    SelectionChanged = "fileSelected"
+                    RaportModel newRaport = new RaportModel
+                    {
+                        EditUserId = userIds.FirstOrDefault()
+                    };
+                    if (!await _raportRepo.CreateRaport(newRaport))
+                    {
+                        CreateRaportViewModel _newRaport = new CreateRaportViewModel();
+                        _newRaport.EditedRaportId = 0;
+                        _newRaport.PathToRaportFile = "";
+                        return View(_newRaport);
+                    }
                 }
-            };
-            var RootFolder = new FileManagerRootFolder
+                //было бы неплохо сделать редирект на страницу с ошибкой
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetCurrentWork(CreateRaportViewModel model)
+        {
+            //удаляем текущую работу
+            await _raportRepo.DeleteRaport(model.EditedRaportId);
+            return RedirectToAction("Index", new
             {
-                Location = "~/App_Data/Raports_Template",
-                Name = "Шаблоны рапортов",
-            };
-            RootFolder.AccessControls.Add(new FileManagerAccessControl
-            {
-                Path = @"\",
-                DeniedPermissions = FileManagerPermissions.Preview,
-                AllowedPermissions = FileManagerPermissions.Full
+                @clearWorkDo = true
             });
-            fileManager.RootFolders.Add(RootFolder);
-            _newRaport.fileManager = fileManager;
-            _newRaport.raportFileds = new List<FieldModel>();
-            return View(_newRaport);
         }
 
         [HttpPost]
@@ -65,24 +85,14 @@ namespace WebRaport.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AddField(FieldModel newField)
+        public JsonResult AddField(FieldModel newField)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return Json(new
-                    {
-                        Result = "ERROR",
-                        Message = "Form is not valid! " +
-                      "Please correct it and try again."
-                    });
-                }
-                //int newFieldId = await _fieldRepository.AddField(newField);
-                //newField.FieldId = newFieldId;
-                return Json(new { Result = "OK", Record = newField });
+                return Json(new { Result = "ERROR", Message = "Not TODO" });
+                //return Json(new { Result = "OK", Record = newField });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
@@ -153,18 +163,30 @@ namespace WebRaport.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetCalculatedFieldTypeOptions()
+        public async Task<JsonResult> GetCalculatedFieldTypeOptions(int FieldType = 0)
         {
-            try
+            if (FieldType == (int)FieldTypesEnum.CalculateValue)
             {
-                var fieldTypes = await _fieldRepository.GetCalculatedFieldTypes();
-                var types = fieldTypes.Select(c => new { DisplayText = c.Description, Value = c.Id });
-                return Json(new { Result = "OK", Options = types });
+                try
+                {
+                    var fieldTypes = await _fieldRepository.GetCalculatedFieldTypes();
+                    var types = fieldTypes.Select(c => new { DisplayText = c.Description, Value = c.Id });
+                    return Json(new { Result = "OK", Options = types });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { Result = "ERROR", Message = ex.Message });
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return Json(new { Result = "ERROR", Message = ex.Message });
+                return Json(new { Result = "OK", Options = new List<string>() });
             }
+        }
+
+        public IActionResult FieldsTablePartial(List<FieldModel> fields)
+        {
+            return PartialView();
         }
 
         [HttpPost]
@@ -173,11 +195,19 @@ namespace WebRaport.Controllers
             try
             {
                 //Get data from database
-                List<FieldModel> fields = await _fieldRepository.GetCreatedFields();
-                if(fields != null)
-                    return Json(new { Result = "OK", Records = fields, TotalRecordCount = fields.Count });
-                else
-                    return Json(new { Result = "OK"});
+                string currentUserName = this.ControllerContext.HttpContext.User.Identity.Name;
+                var userIds = await _userRepository.GetUserIdByLoginName(currentUserName);
+                if (userIds.Any())
+                {
+                    var currentRaportEdited = await _raportRepo.GetCreatingRaportByUserId(userIds.FirstOrDefault());
+                    if (currentRaportEdited != null)
+                    {
+                        List<FieldModel> fields = await _fieldRepository.GetFieldsByRaportId(currentRaportEdited.RaportId);
+                        if (fields != null)
+                            return Json(new { Result = "OK", Records = fields, TotalRecordCount = fields.Count });
+                    }
+                }
+                return Json(new { Result = "OK" });
             }
             catch (Exception ex)
             {

@@ -1,10 +1,10 @@
-﻿@using GleamTech.AspNet.Core
-@using GleamTech.FileUltimate.AspNet.UI
-@model WebRaport.ViewModels.CreateRaportViewModel
+﻿@model WebRaport.ViewModels.CreateRaportViewModel
 
-@section LayoutHead {
-    @this.RenderHead(Model.fileManager)
-}
+<div id="dialogContinue" class="modal fade">
+    <div id="dialogContent" class="modal-dialog">
+        @await Html.PartialAsync("ContinueDialogViewPartial", Model)
+    </div>
+</div>
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -16,30 +16,133 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                        <form asp-action="Create">
-                            <input type="hidden" id="PathToRaportFile" asp-for="PathToRaportFile" />
-                            <div class="form-group">
-                                <div id="partialViewContainer">
-                                    @await Html.PartialAsync("FileManagerPartialView", Model.fileManager)
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div id="FieldsTable"></div>
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="Создать рапорт" class="btn btn-outline-dark" />
-                            </div>
-                        </form>
-                    </div>
+                    <form asp-action="Create">
+                        <div class="form-group">
+                            <input class="input" type="text" asp-for="PathToRaportFile" />                           
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm" asp-controller="FileManager" asp-action="Index">Установить путь к шаблону рапорта</button>
+                        </div>
+                        <div class="form-group">
+                            <div id="FieldsTable"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Создать рапорт" class="btn btn-outline-dark" />
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
     </section>
 </div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //Prepare jtable plugin
+            $('#FieldsTable').jtable({
+                title: 'Поля для подстановки в шаблон рапорта',
+                paging: true, //Enables paging
+                pageSize: 10, //Actually this is not needed since default value is 10.
+                sorting: true, //Enables sorting
+                defaultSorting: 'Name ASC', //Optional. Default sorting on first load.
+                actions: {
+                    listAction: '/CreateRaport/FieldsList',
+                    createAction: '/CreateRaport/AddField',
+                    //updateAction: '/PagingAndSorting.aspx/UpdateStudent',
+                    deleteAction: '/CreateRaport/DeleteField'
+                },
+                fields: {
+                    FieldId: {
+                        key: true,
+                        create: false,
+                        edit: false,
+                        list: false
+                    },
+                    FieldTitle: {
+                        title: 'Название поля',
+                    },
+                    FieldType: {
+                        title: 'Тип поля',
+                        width: '12%',
+                        options: '/CreateRaport/GetFieldTypeOptions',
+                    },
+                    FromInfoTableName: {
+                        title: 'Название таблицы',
+                        dependsOn: 'FieldType',
+                        options: function (data) {
+                            if (data.source == 'list') {
+                                return '/CreateRaport/GetTablesOptions?fieldType=0';
+                            }
+                            return '/CreateRaport/GetTablesOptions?fieldType=' + data.dependedValues.FieldType;
+                        }
+                    },
+                    FromInfoColumnName: {
+                        title: 'Название колонки',
+                        dependsOn: 'FromInfoTableName',
+                        options: function (data) {
+                            if (data.source == 'list') {
+                                //Return url of all cities for optimization.
+                                //This method is called for each row on the table and jTable caches options based on this url.
+                                return '/CreateRaport/GetTableColumnsOptions?fromInfoTableName=""';
+                            }
+
+                            //This code runs when user opens edit/create form or changes country combobox on an edit/create form.
+                            //data.source == 'edit' || data.source == 'create'
+                            return '/CreateRaport/GetTableColumnsOptions?fromInfoTableName=' + data.dependedValues.FromInfoTableName;
+                        }
+                    },
+                    FirstLetterUsing:
+                    {
+                        inputTitle: 'Использовать только первую букву',
+                        title: 'Первая буква',
+                        type: 'checkbox',
+                        values: { 'false': 'Полное значение', 'true': 'Только первую букву' },
+                        defaultValue: 'false'
+                    },
+                    FieldDescription: {
+                        title: 'Описание поля',
+                    },
+                    FieldDirectValue: {
+                        title: 'Прямая замена',
+                    },
+                    FieldCalculateType: {
+                        title: 'Вычисляемое поле',
+                        dependsOn: 'FieldType',
+                        options: function (data) {
+                            if (data.source == 'list') {
+                                return '/CreateRaport/GetCalculatedFieldTypeOptions?fieldType=0';
+                            }
+                            return '/CreateRaport/GetCalculatedFieldTypeOptions?fieldType=' + data.dependedValues.FieldType;
+                        }
+                    }
+                },
+                messages: {
+                    loadingMessage: 'Загрузка полей...',
+                    noDataAvailable: 'Нет созданных полей!',
+                    addNewRecord: 'Добавить новое поле',
+                    editRecord: 'Редактировать поле',
+                    areYouSure: 'Вы уверены?',
+                    deleteConfirmation: 'Это поле будет удалено. Вы уверены?',
+                    save: 'Сохранить',
+                    saving: 'Сохранение',
+                    cancel: 'Отменить',
+                    deleteText: 'Удалить',
+                    deleting: 'Удаление',
+                    error: 'Ошибка',
+                    close: 'Закрыть',
+                }
+            });
+
+            //Load student list from server
+            $('#FieldsTable').jtable('load');
+            if (@Model.EditedRaportId != 0) {
+                $('#dialogContinue').modal('show');
+            }
+            });
+    </script>
 }

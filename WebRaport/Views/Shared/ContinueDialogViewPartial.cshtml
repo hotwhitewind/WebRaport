@@ -1,0 +1,17 @@
+﻿@model WebRaport.ViewModels.CreateRaportViewModel
+    <div class="modal-content">
+        <form asp-controller="CreateRaport" asp-action="ResetCurrentWork" method="post" class="note-modal-form">
+            <div class="modal-header">
+                <h3 id="myModalLabel">Подтверждение</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" asp-for="@Model.EditedRaportId" />
+                <p>Вы хотите продолжить сохраненную работу?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal">Продолжить</button>
+                <button class="btn btn-primary" data-save="modal">Начать заново</button>
+            </div>
+        </form>
+    </div>

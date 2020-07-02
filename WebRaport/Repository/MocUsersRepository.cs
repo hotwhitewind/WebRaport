@@ -111,7 +111,7 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task<string> GetUserFiledValueByColumnName(int Id, string ColumnName)
+        public async Task<string> GetUserFieldValueByColumnName(int Id, string ColumnName)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
@@ -219,6 +219,41 @@ namespace WebRaport.Repository
         {
             SHA384CryptoServiceProvider hashAlgorithm = new SHA384CryptoServiceProvider();
             return Convert.ToBase64String(hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(password)));
+        }
+
+        public async Task<List<int>> GetUserIdByLoginName(string LoginName)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<User>("SELECT * FROM Users WHERE Login = @LoginName", new { LoginName });
+                    var listOfIds = result.Select(c => c.UserId);
+                    return listOfIds.ToList();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        public async Task<string> GetLoginByUserId(int UserId)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<string>("SELECT Login FROM Users WHERE UserId = @UserId", new { UserId });
+                    return result.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
         }
     }
 }

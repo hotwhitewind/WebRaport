@@ -1,0 +1,116 @@
+﻿@page
+@model WebRaport.Pages.FieldsTablePageModel
+@using GleamTech.AspNet.Core
+@using GleamTech.FileUltimate.AspNet.UI
+
+@{
+    Layout = "_Layout";
+}
+
+@section LayoutHead {
+    @this.RenderHead(Model.fileManager)
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Создание рапорта</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <form asp-action="Create">
+                        <input type="hidden" id="PathToRaportFile" asp-for="PathToRaportFile" />
+                        <div class="form-group">
+                            <div id="partialViewContainer">
+                                @await Html.PartialAsync("FileManagerPartialView", Model.fileManager)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="card-body table-responsive p-0">
+                                <div class="row pb-3">
+                                    <div class="col-12">
+                                        <!-- Button -->
+                                        <a class="btn btn-primary btn-sm" asp-page="AddFieldOptionsPage">Создать поле</a>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>FieldID</th>
+                                            <th>Тип</th>
+                                            <th>Название</th>
+                                            <th>Таблица</th>
+                                            <th>Поле таблицы</th>
+                                            <th>Вычисляемый тип</th>
+                                            <th>Прямое значение</th>
+                                            <th>Описание</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model._fileds)
+                                        {
+                                            <tr id="@item.FieldId">
+                                                <td>
+                                                    <a>@item.FieldId</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FieldType</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FieldTitle</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FromInfoTableName</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FromInfoColumnName</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FieldCalculateType</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FieldDirectValue</a>
+                                                </td>
+                                                <td>
+                                                    <a>@item.FieldDescription</a>
+                                                </td>
+
+                                                @*<td class="project-actions text-right">
+                                                        <a class="btn btn-primary btn-sm" asp-page-handler="">
+                                                            <i class="fas fa-pencil-alt">
+                                                            </i>
+                                                            Редактировать
+                                                        </a>
+                                                        <a class="btn btn-danger btn-sm" data-toggle="ajax-modal" asp-controller="FieldsTableController" asp-action="Delete" asp-route-id="@item.FieldId">
+                                                            <i class="fas fa-trash">
+                                                            </i>
+                                                            Удалить
+                                                        </a>
+                                                    </td>*@
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Создать рапорт" class="btn btn-outline-dark" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

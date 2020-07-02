@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,13 +33,13 @@ namespace WebRaport.Models
     public class FieldModel
     {        
         public int FieldId { get; set; }        
-        public string FieldTitle { get; set; }        
-        public string FromInfoTableName { get; set; }       
-        public string FromInfoColumnName { get; set; }        
+        public string FieldTitle { get; set; }
+        public string FromInfoTableName { get; set; }
+        public string FromInfoColumnName { get; set; }
+        public bool FirstLetterUsing { get; set; }
         public string FieldDescription { get; set; }
-        public int FieldType { get; set; }        
+        public int FieldType { get; set; }
         public string FieldDirectValue { get; set; }
-        public bool RaportFlag { get; set; }
         public int FieldCalculateType { get; set; }
     }
 }

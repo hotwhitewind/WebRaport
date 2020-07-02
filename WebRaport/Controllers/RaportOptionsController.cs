@@ -28,21 +28,21 @@ namespace WebRaport.Controllers
         {
             var filedsList = await _raportRepo.GetFieldsByRaportId(userRaportViewModel.RaportId);
             var fieldsWithValueList = new List<FiledModelWithValue>();
-            foreach(var field in filedsList)
-            {
-                switch(field.FromInfoTableName)
-                {
-                    case "Users":
-                        var value = await _userRepo.GetUserFiledValueByColumnName(userRaportViewModel.UserID, field.FromInfoColumnName);
-                        var newFieldWithValue = new FiledModelWithValue
-                        {
-                            FieldName = field.FieldTitle,
-                            FieldValue = value
-                        };
-                        fieldsWithValueList.Add(newFieldWithValue);
-                        break;
-                }
-            }
+            //foreach(var field in filedsList)
+            //{
+            //    switch(field.FromInfoTableName)
+            //    {
+            //        case "Users":
+            //            var value = await _userRepo.GetUserFiledValueByColumnName(userRaportViewModel.UserID, field.FromInfoColumnName);
+            //            var newFieldWithValue = new FiledModelWithValue
+            //            {
+            //                FieldName = field.FieldTitle,
+            //                FieldValue = value
+            //            };
+            //            fieldsWithValueList.Add(newFieldWithValue);
+            //            break;
+            //    }
+            //}
             return View(fieldsWithValueList);
         }
 

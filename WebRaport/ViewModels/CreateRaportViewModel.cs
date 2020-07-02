@@ -7,10 +7,16 @@ using WebRaport.Models;
 
 namespace WebRaport.ViewModels
 {
+    public class SetPathToRaportViewModel
+    {
+        public int RaportId { get; set; }
+        public FileManager fileManager { get; set; }
+        public string PathToRaportFile { get; set; }
+    }
+
     public class CreateRaportViewModel
     {
-        public FileManager fileManager { get; set; }
-        public List<FieldModel> raportFileds { get; set; }
+        public int EditedRaportId { get; set; }
         public string PathToRaportFile { get; set; }
     }
 }

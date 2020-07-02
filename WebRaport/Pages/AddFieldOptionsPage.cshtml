@@ -1,0 +1,67 @@
+﻿@page
+@model WebRaport.Pages.AddFieldOptionsPageModel
+@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Создать поле";
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div><!-- /.container-header -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <form method="post" class="note-modal-form">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @*<div class="form-group">
+                            <label>Тип поля</label>
+                            <input asp-for="fieldModel.FieldType" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Название поля</label>
+                            <input asp-for="fieldModel.FieldTitle" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Таблица</label>
+                            <input asp-for="fieldModel.FromInfoTableName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Колонка</label>
+                            <input asp-for="fieldModel.FromInfoColumnName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Значение для прямой замены</label>
+                            <input asp-for="fieldModel.FieldDirectValue" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Вычисляемый тип</label>
+                            <input asp-for="fieldModel.FieldCalculateType" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <input asp-for="fieldModel.FieldDescription" class="form-control" />
+                        </div>*@
+                        <button class="btn" asp-page="FieldsTablePage">Отменить</button>
+                        <button type="submit" class="btn btn-outline-dark">Создать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

@@ -29,10 +29,11 @@ namespace WebRaport.Repository
             {
                 try
                 {
-                    field.RaportFlag = false;
                     var sqlQuery =
-              "INSERT INTO Fields (FieldTitle,FromInfoTableName,FromInfoColumnName,FieldDescription,FieldType,FieldDirectValue,RaportFlag) " +
-              "VALUES (@FieldTitle, @FromInfoTableName, @FromInfoColumnName, @FieldDescription,@FieldType,@FieldDirectValue,@RaportFlag); " +
+              "INSERT INTO Fields (FieldTitle,FromInfoTableName,FromInfoColumnName,FieldDescription,FieldType,FieldDirectValue," +
+              "FieldCalculateType,FirstLetterUsing) " +
+              "VALUES (@FieldTitle, @FromInfoTableName, @FromInfoColumnName, @FieldDescription,@FieldType,@FieldDirectValue," +
+              "@FieldCalculateType,@FirstLetterUsing); " +
               "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int? fieldIdRet = await db.QueryFirstOrDefaultAsync<int>(sqlQuery, field);
                     field.FieldId = fieldIdRet.Value;
@@ -59,23 +60,6 @@ namespace WebRaport.Repository
                 catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
-                }
-            }
-        }
-
-        public async Task<List<FieldModel>> GetCreatedFields()
-        {
-            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
-            {
-                try
-                {
-                    var result = await db.QueryAsync<FieldModel>("SELECT * FROM Fields WHERE RaportFlag = 0");
-                    return result.ToList();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message);
-                    return null;
                 }
             }
         }
@@ -199,6 +183,24 @@ namespace WebRaport.Repository
                     var result = await db.QueryAsync<string>("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS " +
                         "WHERE TABLE_NAME = @tableName", new { tableName });
 
+                    return result.ToList();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        public async Task<List<FieldModel>> GetFieldsByRaportId(int RaportId)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<FieldModel>("SELECT * FROM RaportFields WHERE RaportId = @RaportId",
+                        new { RaportId });
                     return result.ToList();
                 }
                 catch (Exception ex)

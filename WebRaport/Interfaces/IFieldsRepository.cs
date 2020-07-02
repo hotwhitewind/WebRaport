@@ -9,7 +9,7 @@ namespace WebRaport.Interfaces
     public interface IFieldsRepository
     {
         public Task<List<FieldModel>> GetFields();
-        public Task<List<FieldModel>> GetCreatedFields();
+        public Task<List<FieldModel>> GetFieldsByRaportId(int RaportId);
 
         public Task<int> AddField(FieldModel field);
         public Task DeleteField(int FieldId);

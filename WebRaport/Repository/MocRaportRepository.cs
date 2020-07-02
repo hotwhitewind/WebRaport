@@ -67,8 +67,8 @@ namespace WebRaport.Repository
                 try
                 {
                     var sqlQuery =
-                        "INSERT INTO Raports (RaportTitle, RaportData) " +
-                        "VALUES (@RaportTitle, @RaportData); " +
+                        "INSERT INTO Raports (RaportTitle, RaportFilePath, IsCreated, EditUserId) " +
+                        "VALUES (@RaportTitle, @RaportFilePath, @IsCreated, @EditUserId); " +
                         "SELECT CAST(SCOPE_IDENTITY() as int)";
                     int? raportIdRet = await db.QueryFirstOrDefaultAsync<int>(sqlQuery, raport);
 
@@ -116,13 +116,71 @@ namespace WebRaport.Repository
             }
         }
 
-        public async Task<FieldModel> GetFieldById(int Id)
+        public async Task<bool> AddFieldIntoRaport(int RaportId, int FieldId)
         {
             using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
             {
                 try
                 {
-                    var result = await db.QueryAsync<FieldModel>("SELECT * FROM Fields WHERE FieldId = @Id", new { Id });
+                    var sqlQuery =
+                        "INSERT INTO RaportFields (RaportId, FieldId) " +
+                        "VALUES (@RaportId, @FieldId); " +
+                        "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    int? raportIdRet = await db.QueryFirstOrDefaultAsync<int>(sqlQuery, new { RaportId, FieldId });
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        public async Task SetRaportCreated(int RaportId)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var sqlQuery =
+                        "UPDATE Raports SET IsCreated = 1 WHERE RaportId = @RaportId";
+                    await db.ExecuteAsync(sqlQuery, new { RaportId });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                }
+            }
+        }
+
+        public async Task UpdateRaport(RaportModel raport)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var sqlQuery =
+                        "UPDATE Raports SET RaportTitle = @RaportTitle, RaportFilePath = @RaportFilePath, " +
+                        "IsCreated = @IsCreated, EditUserId = @EditUserId WHERE RaportId = @RaportId";
+                    await db.ExecuteAsync(sqlQuery, raport);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                }
+            }
+        }
+
+        public async Task<RaportModel> GetCreatingRaportByUserId(int UserId)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<RaportModel>("SELECT * FROM Raports WHERE " +
+                        "CreatingUserId = @UserId AND IsCreated = 0", new { UserId });
                     return result.FirstOrDefault();
                 }
                 catch (Exception ex)
@@ -133,14 +191,40 @@ namespace WebRaport.Repository
             }
         }
 
-        public Task<bool> CreateField(FieldModel field)
+        public async Task<List<RaportModel>> GetCreatedRaports()
         {
-            throw new NotImplementedException();
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<RaportModel>("SELECT * FROM Raports WHERE IsCreated = 1");
+
+                    return result.ToList();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
         }
 
-        public Task DeleteField(int Id)
+        public async Task UpdateRaportTemplateFilePath(int RaportId, string path, int editUserId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var sqlQuery =
+                        "UPDATE Raports SET RaportFilePath = @RaportFilePath, EditUserId = @EditUserId " +
+                        "WHERE RaportId = @RaportId";
+                    await db.ExecuteAsync(sqlQuery, new { RaportId, RaportFilePath = path, EditUserId = editUserId });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                }
+            }
         }
     }
 }
