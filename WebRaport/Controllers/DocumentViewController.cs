@@ -13,6 +13,7 @@ namespace WebRaport.Controllers
     {
         public IActionResult Index()
         {
+            var te = TempData["FromPost"];
             var documentViewer = new DocumentViewer
             {
                 Width = 800,
@@ -26,6 +27,12 @@ namespace WebRaport.Controllers
             //  new DocumentInfo("d", "Default.docx"),
             //  new StreamResult(stream));
             return View(documentViewer);
+        }
+
+        [HttpPost]
+        public IActionResult Index(object obj)
+        {
+            return View();
         }
     }
 }

@@ -51,8 +51,14 @@ namespace WebRaport.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(UsersAndRaportsViewModel userRaportViewModel)
+        public async Task<IActionResult> Index(UsersAndRaportsViewModel userRaportViewModel)
         {
+            //var RaportHandlerPageName = await _raportRepo.GetHandlerPageName(userRaportViewModel.RaportId);
+            //return RedirectToPage("/RaportsHandler/" + RaportHandlerPageName, new
+            //{ 
+            //    @userId = userRaportViewModel.UserID,
+            //    @raportId = userRaportViewModel.RaportId
+            //});
             return RedirectToAction("Index", "RaportOptions", userRaportViewModel);
         }
 

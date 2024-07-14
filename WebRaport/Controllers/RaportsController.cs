@@ -84,7 +84,8 @@ namespace WebRaport.Controllers
         public async Task<IActionResult> Edit(int id, string pathToRaportFile = "")
         {
             var raport = await _raportRepo.GetRaportById(id);
-            raport.RaportFilePath = pathToRaportFile;
+            if(pathToRaportFile != "")
+                raport.RaportFilePath = pathToRaportFile;
             return View(raport);
         }
 

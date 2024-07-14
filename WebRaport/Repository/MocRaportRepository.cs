@@ -226,5 +226,24 @@ namespace WebRaport.Repository
                 }
             }
         }
+
+        public async Task<string> GetHandlerPageName(int RaportId)
+        {
+            using (IDbConnection db = new SqlConnection(_config.GetConnectionString("DBConnectionString")))
+            {
+                try
+                {
+                    var result = await db.QueryAsync<string>("SELECT RaportHandlerPageName FROM Raports " +
+                        "WHERE RaportId = @RaportId", new { RaportId });
+
+                    return result.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return null;
+                }
+            }
+        }
     }
 }

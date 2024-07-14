@@ -35,13 +35,15 @@ $(function () {
     //Optional: turn the chache off
     $.ajaxSetup({ cache: false });
     $('button[data-toggle="ajax-modal"]').click(function (e) {
+        $.post('', $('form').serialize(), function () {
             $('#dialogDiv').modal({
                 backdrop: 'static',
                 keyboard: true
             }, 'show');
             submitDlg(this);
-        });
-        return false;    
+        })
+    });
+    return false;
 });
 
 function submitDlg(dialog) {

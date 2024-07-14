@@ -45,6 +45,7 @@ namespace WebRaport
                 options.LoginPath = new PathString("/Login/Login");
                 options.AccessDeniedPath = new PathString("/Login/AccessDenied");
             });
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
             services.AddRazorPages();
             //подключение Newtonsoft Json с PascalCase по дефолту
             services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ContractResolver = new DefaultContractResolver()); 

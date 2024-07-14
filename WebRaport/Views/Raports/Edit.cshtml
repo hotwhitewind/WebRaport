@@ -21,7 +21,7 @@
                     <form asp-action="Edit">
                         <div class="form-group">
                             <input type="hidden" asp-for="RaportId" />
-                            <input class="input" type="text" asp-for="RaportFilePath" />
+                            <input class="input" type="text" asp-for="RaportFilePath" style="{width: auto}" />
                         </div>
                         <div class="form-group">
                             <button class="btn btn-primary btn-sm" asp-controller="FileManager" asp-action="Index" asp-route-id="@Model.RaportId">Установить путь к шаблону рапорта</button>

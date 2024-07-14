@@ -1,16 +1,54 @@
 ﻿@page
+@using GleamTech.AspNet.Core
+@using GleamTech.DocumentUltimate.AspNet.UI
 @model WebRaport.Pages.RaportsHandler.VacationRaportPageModel
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Настройка рапорта";
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>VacationRaportPage</title>
-</head>
-<body>
-</body>
-</html>
+@section LayoutHead {
+    @this.RenderHead(Model.documentViewer)
+}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div><!-- /.container-header -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <input type="hidden" asp-for="@Model.RaportId" />
+                    <input type="hidden" asp-for="@Model.UserId" />
+                    <input type="text" asp-for="@Model.Message" />
+                    <a class="btn" asp-controller="Home" asp-action="Index">Отменить</a>
+                    <button id="submit" class="btn btn-outline-dark">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $('#submit').on('click', function () {
+                $.get("/RaportsHandler/VacationRaportPage?handler=Result").done(function (data) {
+                    $(document).append(data).find('.modal').modal('show');
+                });
+            });
+        });
+    </script>
+}
+

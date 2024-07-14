@@ -12,6 +12,7 @@ namespace WebRaport.Interfaces
         Task<List<RaportModel>> GetCreatedRaports();
         Task<RaportModel> GetCreatingRaportByUserId(int UserId);
         Task<List<FieldModel>> GetFieldsByRaportId(int Id);
+        Task<string> GetHandlerPageName(int RaportId);
         Task<bool> CreateRaport(RaportModel raport);
         Task SetRaportCreated(int RaportId);
         Task UpdateRaport(RaportModel raport);
